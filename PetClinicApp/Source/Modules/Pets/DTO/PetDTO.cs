@@ -12,5 +12,6 @@ namespace PetClinicApp.Source.Modules.Pets.DTO
         public DateTime BornIn { get; set; }
         public long AnimalId { get; set; }
         public DateTime CreatedAt { get; set; }
+        public string Avatar { get; set; }
     }
 }

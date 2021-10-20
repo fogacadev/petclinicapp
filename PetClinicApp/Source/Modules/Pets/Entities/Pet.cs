@@ -30,7 +30,8 @@ namespace PetClinicApp.Source.Modules.Pets.Entities
                 Name = pet.Name,
                 BornIn = pet.BornIn,
                 AnimalId = pet.AnimalId,
-                CreatedAt = pet.CreatedAt
+                CreatedAt = pet.CreatedAt,
+                Avatar = pet.Avatar
             };
         }
 
@@ -52,7 +53,8 @@ namespace PetClinicApp.Source.Modules.Pets.Entities
                 Name = pet.Name,
                 BornIn = pet.BornIn,
                 AnimalId = pet.AnimalId,
-                CreatedAt = pet.CreatedAt
+                CreatedAt = pet.CreatedAt,
+                Avatar = pet.Avatar
             };
         }
 
