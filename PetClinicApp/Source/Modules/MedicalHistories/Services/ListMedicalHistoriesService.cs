@@ -1,5 +1,6 @@
 ﻿using PetClinicApp.Source.Modules.MedicalHistories.Entities;
 using PetClinicApp.Source.Modules.MedicalHistories.Repositories;
+using PetClinicApp.Source.Modules.Pets.Repositories;
 using PetClinicApp.Source.Modules.Pets.Repositories.Implementations;
 using PetClinicApp.Source.Shared.Errors;
 using System.Collections.Generic;
@@ -11,9 +12,9 @@ namespace PetClinicApp.Source.Modules.MedicalHistories.Services
     public class ListMedicalHistoriesService
     {
         private readonly IMedicalHistoriesRepository medicalHistoriesRepository;
-        private readonly PetsRepository petsRepository;
+        private readonly IPetsRepository petsRepository;
         public ListMedicalHistoriesService(IMedicalHistoriesRepository medicalHistoriesRepository,
-            PetsRepository petsRepository)
+            IPetsRepository petsRepository)
         {
             this.medicalHistoriesRepository = medicalHistoriesRepository;
             this.petsRepository = petsRepository;

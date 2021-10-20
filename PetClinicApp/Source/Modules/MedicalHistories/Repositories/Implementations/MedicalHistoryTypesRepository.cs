@@ -45,7 +45,9 @@ namespace PetClinicApp.Source.Modules.MedicalHistories.Repositories.Implementati
 
         public async Task<List<MedicalHistoryType>> List(string search = "")
         {
-            return await appDbContext.MedicalHistoryTypes.Where(t => t.Name.Contains(search)).AsNoTracking().ToListAsync();
+            var types = await appDbContext.MedicalHistoryTypes.AsNoTracking().ToListAsync();
+
+            return types.AsQueryable().Filter(search).ToList();
         }
 
         public async Task Update(MedicalHistoryType medicalHistoryType)

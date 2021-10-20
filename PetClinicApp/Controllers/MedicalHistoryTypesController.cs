@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PetClinicApp.Source.Modules.MedicalHistories.DTO;
 using PetClinicApp.Source.Modules.MedicalHistories.Entities;
 using PetClinicApp.Source.Modules.MedicalHistories.Services;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ namespace PetClinicApp.Controllers
     public class MedicalHistoryTypesController :  ControllerBase
     {
         [HttpGet("{id}")]
-        public async Task<ActionResult<MedicalHistoryType>> Get([FromServices] FindMedicalHistoryTypeService findMedicalHistoryTypeService, [FromRoute] long id)
+        public async Task<ActionResult<MedicalHistoryTypeDTO>> Get([FromServices] FindMedicalHistoryTypeService findMedicalHistoryTypeService, [FromRoute] long id)
         {
             var type = await findMedicalHistoryTypeService.ExecuteAsync(id);
 
@@ -19,7 +20,7 @@ namespace PetClinicApp.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<MedicalHistoryType>>> Get([FromServices] ListMedicalHistoryTypeService listMedicalHistoryTypeService, [FromQuery] string search)
+        public async Task<ActionResult<List<MedicalHistoryTypeDTO>>> Get([FromServices] ListMedicalHistoryTypeService listMedicalHistoryTypeService, [FromQuery] string search)
         {
             var types = await listMedicalHistoryTypeService.ExecuteAsync(search);
 

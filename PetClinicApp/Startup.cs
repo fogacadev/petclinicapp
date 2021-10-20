@@ -16,6 +16,7 @@ using PetClinicApp.Source.Modules.Clinics.Repositories.Implementations;
 using PetClinicApp.Source.Modules.Clinics.Services;
 using PetClinicApp.Source.Modules.MedicalHistories.Repositories;
 using PetClinicApp.Source.Modules.MedicalHistories.Repositories.Implementations;
+using PetClinicApp.Source.Modules.MedicalHistories.Services;
 using PetClinicApp.Source.Modules.Pets.Repositories;
 using PetClinicApp.Source.Modules.Pets.Repositories.Implementations;
 using PetClinicApp.Source.Modules.Pets.Services;
@@ -160,6 +161,17 @@ namespace PetClinicApp
             services.AddTransient<FindReminderTypeService>();
             services.AddTransient<ListReminderTypesService>();
             services.AddTransient<UpdateReminderTypeService>();
+
+            //medical history
+            services.AddTransient<CreateMedicalHistoryService>();
+            services.AddTransient<UpdateMedicalHistoryService>();
+            services.AddTransient<FindMedicalHistoryService>();
+            services.AddTransient<DeleteMedicalHistoryService>();
+            services.AddTransient<ListMedicalHistoriesService>();
+
+            //medical history type
+            services.AddTransient<ListMedicalHistoryTypeService>();
+            services.AddTransient<FindMedicalHistoryTypeService>();
         }
 
         public void ConfigureAppRepositories(IServiceCollection services ) {

@@ -1,4 +1,5 @@
-﻿using PetClinicApp.Source.Modules.MedicalHistories.Entities;
+﻿using PetClinicApp.Source.Modules.MedicalHistories.DTO;
+using PetClinicApp.Source.Modules.MedicalHistories.Entities;
 using PetClinicApp.Source.Modules.MedicalHistories.Repositories;
 using PetClinicApp.Source.Shared.Errors;
 using System.Net;
@@ -14,7 +15,7 @@ namespace PetClinicApp.Source.Modules.MedicalHistories.Services
             this.medicalHistoryTypesRepository = medicalHistoryTypesRepository;
         }
 
-        public async Task<MedicalHistoryType> ExecuteAsync(long id)
+        public async Task<MedicalHistoryTypeDTO> ExecuteAsync(long id)
         {
             var type = await medicalHistoryTypesRepository.Find(id);
 
@@ -23,7 +24,7 @@ namespace PetClinicApp.Source.Modules.MedicalHistories.Services
                 throw new AppErrorException("Type does not exists.", HttpStatusCode.NotFound);
             }
 
-            return type;
+            return type.ToDTO();
         }
     }
 }

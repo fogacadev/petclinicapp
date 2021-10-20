@@ -1,6 +1,8 @@
-﻿using PetClinicApp.Source.Modules.MedicalHistories.Entities;
+﻿using PetClinicApp.Source.Modules.MedicalHistories.DTO;
+using PetClinicApp.Source.Modules.MedicalHistories.Entities;
 using PetClinicApp.Source.Modules.MedicalHistories.Repositories;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace PetClinicApp.Source.Modules.MedicalHistories.Services
@@ -13,11 +15,11 @@ namespace PetClinicApp.Source.Modules.MedicalHistories.Services
             this.medicalHistoryTypesRepository = medicalHistoryTypesRepository;
         }
 
-        public async Task<List<MedicalHistoryType>> ExecuteAsync(string search)
+        public async Task<List<MedicalHistoryTypeDTO>> ExecuteAsync(string search)
         {
             var types = await medicalHistoryTypesRepository.List(search);
 
-            return types;
+            return types.Select(t => t.ToDTO()).ToList();
         }
     }
 }
