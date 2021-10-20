@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using PetClinicApp.Source.Modules.Clinics.DTO;
 using PetClinicApp.Source.Modules.Clinics.Entities;
 using PetClinicApp.Source.Modules.Clinics.Services;
@@ -9,6 +11,7 @@ namespace PetClinicApp.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
+    [Authorize]
     public class ClinicsController : ControllerBase
     {
         [HttpGet("{id}")]
@@ -48,6 +51,22 @@ namespace PetClinicApp.Controllers
             var clinic = await deleteClinicService.ExecuteAsync(id);
 
             return Ok(clinic);
+        }
+
+        [HttpPost("{id}/avatar")]
+        public async Task<ActionResult> UploadAvatar([FromServices] UploadClinicAvatarService uploadClinicAvatarService, [FromRoute] long id, [FromForm] IFormFile file)
+        {
+            await uploadClinicAvatarService.ExecuteAsync(id, file);
+
+            return NoContent();
+        }
+
+        [HttpGet("{id}/avatar")]
+        public async Task<ActionResult> DownloadAvatar([FromServices] DownloadClinicAvatarService downloadClinicAvatarService, [FromRoute] long id)
+        {
+            var file = await downloadClinicAvatarService.ExecuteAsync(id);
+
+            return File(file.Buffer, file.MimeType);
         }
     }
 }

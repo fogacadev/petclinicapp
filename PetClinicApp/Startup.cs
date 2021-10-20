@@ -128,6 +128,9 @@ namespace PetClinicApp
             services.AddTransient<ListClinicsService>();
             services.AddTransient<UpdateClinicService>();
             services.AddTransient<UpdateClinicServiceService>();
+            services.AddTransient<UploadClinicAvatarService>();
+            services.AddTransient<DownloadClinicAvatarService>();
+
 
             //pets
             services.AddTransient<CreateAnimalService>();

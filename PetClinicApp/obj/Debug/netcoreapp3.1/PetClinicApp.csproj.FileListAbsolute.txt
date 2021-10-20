@@ -65,7 +65,6 @@ C:\Desenvolvimento\.net\PetClinicApp\PetClinicApp\bin\Debug\netcoreapp3.1\Pomelo
 C:\Desenvolvimento\.net\PetClinicApp\PetClinicApp\bin\Debug\netcoreapp3.1\System.Collections.Immutable.dll
 C:\Desenvolvimento\.net\PetClinicApp\PetClinicApp\bin\Debug\netcoreapp3.1\System.Diagnostics.DiagnosticSource.dll
 C:\Desenvolvimento\.net\PetClinicApp\PetClinicApp\bin\Debug\netcoreapp3.1\MimeTypes.dll
-C:\Desenvolvimento\.net\PetClinicApp\PetClinicApp\obj\Debug\netcoreapp3.1\PetClinicApp.csproj.AssemblyReference.cache
 C:\Desenvolvimento\.net\PetClinicApp\PetClinicApp\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 C:\Desenvolvimento\.net\PetClinicApp\PetClinicApp\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.JsonWebTokens.dll
 C:\Desenvolvimento\.net\PetClinicApp\PetClinicApp\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Logging.dll
@@ -73,3 +72,4 @@ C:\Desenvolvimento\.net\PetClinicApp\PetClinicApp\bin\Debug\netcoreapp3.1\Micros
 C:\Desenvolvimento\.net\PetClinicApp\PetClinicApp\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 C:\Desenvolvimento\.net\PetClinicApp\PetClinicApp\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Tokens.dll
 C:\Desenvolvimento\.net\PetClinicApp\PetClinicApp\bin\Debug\netcoreapp3.1\System.IdentityModel.Tokens.Jwt.dll
+C:\Desenvolvimento\.net\PetClinicApp\PetClinicApp\obj\Debug\netcoreapp3.1\PetClinicApp.csproj.CopyComplete
