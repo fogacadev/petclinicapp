@@ -20,18 +20,18 @@ namespace PetClinicApp.Source.Modules.Clinics.Services
             this.clinicsRepository = clinicsRepository;
         }
 
-        public async Task<ClinicService> ExecuteAsync(ClinicServiceDTO clinicService)
+        public async Task<ClinicServiceDTO> ExecuteAsync(CreateClinicServiceDTO clinicService)
         {
             ValidateModel(clinicService);
 
             var clinic = await clinicsRepository.Find(clinicService.ClinicId);
             if(clinic == null)
             {
-                throw new AppErrorException("Clinic does not exists");
+                throw new AppErrorException("Clinic does not exists.");
             }
             var createdClinicService = await clinicServicesRepository.Create(clinicService.ToEntity());
 
-            return createdClinicService;
+            return createdClinicService.ToDTO();
         }
     }
 }

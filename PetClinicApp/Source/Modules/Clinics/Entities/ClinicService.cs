@@ -26,6 +26,24 @@ namespace PetClinicApp.Source.Modules.Clinics.Entities
             };
         }
 
+        public static ClinicService ToEntity(this CreateClinicServiceDTO service)
+        {
+            return new ClinicService
+            {
+                ClinicId = service.ClinicId,
+                Name = service.Name
+            };
+        }
+
+        public static ClinicService ToEntity(this UpdateClinicServiceDTO service)
+        {
+            return new ClinicService
+            {
+                Id = service.Id,
+                Name = service.Name
+            };
+        }
+
         public static ClinicServiceDTO ToDTO(this ClinicService service)
         {
             return new ClinicServiceDTO
@@ -34,6 +52,18 @@ namespace PetClinicApp.Source.Modules.Clinics.Entities
                 ClinicId = service.ClinicId,
                 Name = service.Name
             };
+        }
+
+        public static IQueryable<ClinicService> Filter(this IQueryable<ClinicService> query, string search)
+        {
+            if (!string.IsNullOrEmpty(search))
+            {
+                search = search.ToUpper();
+
+                query = query.Where(s => s.Name.ToUpper().Contains(search));
+            }
+
+            return query;
         }
     }
 }

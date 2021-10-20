@@ -50,11 +50,11 @@ namespace PetClinicApp.Source.Modules.Clinics.Repositories.Implementations
         {
             var clinicServices = await appDbContext
                 .ClinicServices
-                .Where(s => s.Name.Contains(search) && s.ClinicId == clinicId)
+                .Where(s => s.ClinicId == clinicId)
                 .AsNoTracking()
                 .ToListAsync();
 
-            return clinicServices;
+            return clinicServices.AsQueryable().Filter(search).ToList();
         }
 
         public async Task Update(ClinicService clinicService)

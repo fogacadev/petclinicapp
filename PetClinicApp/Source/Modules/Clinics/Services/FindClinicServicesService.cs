@@ -1,4 +1,5 @@
-﻿using PetClinicApp.Source.Modules.Clinics.Entities;
+﻿using PetClinicApp.Source.Modules.Clinics.DTO;
+using PetClinicApp.Source.Modules.Clinics.Entities;
 using PetClinicApp.Source.Modules.Clinics.Repositories;
 using PetClinicApp.Source.Shared.Errors;
 using System;
@@ -17,7 +18,7 @@ namespace PetClinicApp.Source.Modules.Clinics.Services
             this.clinicServicesRepository = clinicServicesRepository;
         }
 
-        public async Task<ClinicService> ExecuteAsync(long id)
+        public async Task<ClinicServiceDTO> ExecuteAsync(long id)
         {
             var service = await clinicServicesRepository.Find(id);
 
@@ -26,7 +27,7 @@ namespace PetClinicApp.Source.Modules.Clinics.Services
                 throw new AppErrorException("Service does not exists", HttpStatusCode.NotFound);
             }
 
-            return service;
+            return service.ToDTO();
         }
     }
 }

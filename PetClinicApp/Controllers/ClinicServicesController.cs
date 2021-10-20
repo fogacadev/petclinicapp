@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PetClinicApp.Source.Modules.Clinics.DTO;
 using PetClinicApp.Source.Modules.Clinics.Entities;
 using PetClinicApp.Source.Modules.Clinics.Services;
@@ -9,18 +10,19 @@ namespace PetClinicApp.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
+    [Authorize]
     public class ClinicServicesController : ControllerBase
     {
         [HttpGet("{id}")]
-        public async Task<ActionResult<ClinicService>> Get([FromServices] FindClinicServicesService findClinicServicesService, [FromRoute] long id)
+        public async Task<ActionResult<ClinicServiceDTO>> Get([FromServices] FindClinicServicesService findClinicServicesService, [FromRoute] long id)
         {
             var service = await findClinicServicesService.ExecuteAsync(id);
 
             return Ok(service);
         }
 
-        [HttpGet("clinic/{clinicId}")]
-        public async Task<ActionResult<List<ClinicService>>> Get([FromServices] ListClinicServicesUseCase listClinicServicesUseCase, [FromRoute] long clinicId, [FromQuery] string search)
+        [HttpGet("{clinicId}/clinic")]
+        public async Task<ActionResult<List<ClinicServiceDTO>>> Get([FromServices] ListClinicServicesUseCase listClinicServicesUseCase, [FromRoute] long clinicId, [FromQuery] string search)
         {
             var services = await listClinicServicesUseCase.Execute(clinicId, search);
 
@@ -28,7 +30,7 @@ namespace PetClinicApp.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ClinicService>> Post([FromServices] CreateClinicServiceSerivice createClinicServiceSerivice, [FromBody] ClinicServiceDTO clinicService)
+        public async Task<ActionResult<ClinicServiceDTO>> Post([FromServices] CreateClinicServiceSerivice createClinicServiceSerivice, [FromBody] CreateClinicServiceDTO clinicService)
         {
             var createdClinicService = await createClinicServiceSerivice.ExecuteAsync(clinicService);
 
@@ -36,7 +38,7 @@ namespace PetClinicApp.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult> Put([FromServices] UpdateClinicServiceService updateClinicServiceService, [FromBody] ClinicServiceDTO clinicService)
+        public async Task<ActionResult> Put([FromServices] UpdateClinicServiceService updateClinicServiceService, [FromBody] UpdateClinicServiceDTO clinicService)
         {
             await updateClinicServiceService.ExecuteAsync(clinicService);
 
@@ -44,7 +46,7 @@ namespace PetClinicApp.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<ClinicService>> Delete([FromServices] DeleteClinicServiceService deleteClinicServiceService, [FromRoute] long id)
+        public async Task<ActionResult<ClinicServiceDTO>> Delete([FromServices] DeleteClinicServiceService deleteClinicServiceService, [FromRoute] long id)
         {
             var service = await deleteClinicServiceService.ExecuteAsync(id);
 

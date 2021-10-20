@@ -19,7 +19,7 @@ namespace PetClinicApp.Source.Modules.Clinics.Services
             this.clinicServicesRepository = clinicServicesRepository;
         }
 
-        public async Task ExecuteAsync(ClinicServiceDTO clinicService)
+        public async Task ExecuteAsync(UpdateClinicServiceDTO clinicService)
         {
             var createdService = await clinicServicesRepository.Find(clinicService.Id);
 
@@ -30,7 +30,9 @@ namespace PetClinicApp.Source.Modules.Clinics.Services
 
             ValidateModel(clinicService);
 
-            await clinicServicesRepository.Update(clinicService.ToEntity());
+            createdService.Name = clinicService.Name;
+
+            await clinicServicesRepository.Update(createdService);
         }
     }
 }
