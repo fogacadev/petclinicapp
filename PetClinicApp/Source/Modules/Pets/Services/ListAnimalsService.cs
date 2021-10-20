@@ -1,4 +1,5 @@
-﻿using PetClinicApp.Source.Modules.Pets.Entities;
+﻿using PetClinicApp.Source.Modules.Pets.DTO;
+using PetClinicApp.Source.Modules.Pets.Entities;
 using PetClinicApp.Source.Modules.Pets.Repositories;
 using System;
 using System.Collections.Generic;
@@ -15,11 +16,11 @@ namespace PetClinicApp.Source.Modules.Pets.Services
             this.animalsRepository = animalsRepository;
         }
 
-        public async Task<List<Animal>> ExecuteAsync(string search)
+        public async Task<List<AnimalDTO>> ExecuteAsync(string search)
         {
             var animals = await animalsRepository.List(search);
 
-            return animals;
+            return animals.Select(a => a.ToDTO()).ToList();
         }
     }
 }

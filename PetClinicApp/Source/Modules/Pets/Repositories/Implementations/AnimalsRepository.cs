@@ -51,11 +51,12 @@ namespace PetClinicApp.Source.Modules.Pets.Repositories.Implementations
 
         public async Task<List<Animal>> List(string search = "")
         {
-            return await appDbContext
+            var animals = await appDbContext
                 .Animals
-                .Where(a => a.Name.Contains(search))
                 .AsNoTracking()
                 .ToListAsync();
+
+            return animals.AsQueryable().Filter(search).ToList();
         }
 
         public async Task Update(Animal animal)

@@ -24,6 +24,23 @@ namespace PetClinicApp.Source.Modules.Pets.Entities
             };
         }
 
+        public static Animal ToEntity(this CreateAnimalDTO animal)
+        {
+            return new Animal
+            {
+                Name = animal.Name
+            };
+        }
+
+        public static Animal ToEntity(this UpdateAnimalDTO animal)
+        {
+            return new Animal
+            {
+                Id = animal.Id,
+                Name = animal.Name
+            };
+        }
+
         public static AnimalDTO ToDTO(this Animal animal)
         {
             return new AnimalDTO
@@ -31,6 +48,17 @@ namespace PetClinicApp.Source.Modules.Pets.Entities
                 Id = animal.Id,
                 Name = animal.Name
             };
+        }
+
+        public static IQueryable<Animal> Filter(this IQueryable<Animal> query, string search)
+        {
+            if (!string.IsNullOrEmpty(search))
+            {
+                search = search.ToUpper();
+                query = query.Where(a => a.Name.ToUpper().Contains(search));
+            }
+
+            return query;
         }
     }
 }

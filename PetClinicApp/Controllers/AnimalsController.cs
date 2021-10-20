@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PetClinicApp.Source.Modules.Pets.DTO;
 using PetClinicApp.Source.Modules.Pets.Entities;
 using PetClinicApp.Source.Modules.Pets.Services;
@@ -9,10 +10,11 @@ namespace PetClinicApp.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
+    [Authorize]
     public class AnimalsController : ControllerBase
     {
         [HttpGet("{id}")]
-        public async Task<ActionResult<Animal>> Get([FromServices] FindAnimalService findAnimalService, [FromRoute] long id)
+        public async Task<ActionResult<AnimalDTO>> Get([FromServices] FindAnimalService findAnimalService, [FromRoute] long id)
         {
             var animal = await findAnimalService.ExecuteAsync(id);
 
@@ -20,7 +22,7 @@ namespace PetClinicApp.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Animal>>> Get([FromServices] ListAnimalsService listAnimalsService, [FromQuery] string search)
+        public async Task<ActionResult<List<AnimalDTO>>> Get([FromServices] ListAnimalsService listAnimalsService, [FromQuery] string search)
         {
             var animals = await listAnimalsService.ExecuteAsync(search);
 
@@ -28,7 +30,7 @@ namespace PetClinicApp.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Animal>> Post([FromServices] CreateAnimalService createAnimalService, [FromBody] AnimalDTO animal)
+        public async Task<ActionResult<AnimalDTO>> Post([FromServices] CreateAnimalService createAnimalService, [FromBody] CreateAnimalDTO animal)
         {
             var createdAnimal = await createAnimalService.ExecuteAsync(animal);
 
@@ -36,7 +38,7 @@ namespace PetClinicApp.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult> Put([FromServices] UpdateAnimalService updateAnimalService, [FromBody] AnimalDTO animal)
+        public async Task<ActionResult> Put([FromServices] UpdateAnimalService updateAnimalService, [FromBody] UpdateAnimalDTO animal)
         {
             await updateAnimalService.ExecuteAsync(animal);
 
@@ -44,7 +46,7 @@ namespace PetClinicApp.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete([FromServices] DeleteAnimalService deleteAnimalService, [FromRoute] long id) 
+        public async Task<ActionResult<AnimalDTO>> Delete([FromServices] DeleteAnimalService deleteAnimalService, [FromRoute] long id) 
         {
             var animal = await deleteAnimalService.ExecuteAsync(id);
 
