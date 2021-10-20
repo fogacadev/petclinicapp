@@ -7,15 +7,17 @@ using PetClinicApp.Source.Shared.Jwt;
 using System.Collections.Generic;
 using Microsoft.Net.Http.Headers;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PetClinicApp.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
+    [Authorize]
     public class MedicalHistoriesController : ControllerBase
     {
         [HttpGet("{id}")]
-        public async Task<ActionResult<MedicalHistory>> Get([FromServices] FindMedicalHistoryService findMedicalHistoryService, [FromRoute] long id)
+        public async Task<ActionResult<MedicalHistoryDTO>> Get([FromServices] FindMedicalHistoryService findMedicalHistoryService, [FromRoute] long id)
         {
             var loggedUserId = User.GetUserId();
             var history = await findMedicalHistoryService.ExecuteAsync(loggedUserId, id);
@@ -23,8 +25,8 @@ namespace PetClinicApp.Controllers
             return Ok(history);
         }
 
-        [HttpGet("pet/{petId}")]
-        public async Task<ActionResult<List<MedicalHistory>>> Get([FromServices] ListMedicalHistoriesService listMedicalHistoriesService, [FromRoute] long petId, [FromQuery] string search)
+        [HttpGet("{petId}/pet")]
+        public async Task<ActionResult<List<MedicalHistoryDTO>>> Get([FromServices] ListMedicalHistoriesService listMedicalHistoriesService, [FromRoute] long petId, [FromQuery] string search)
         {
             var loggedUserId = User.GetUserId();
             var histories = await listMedicalHistoriesService.ExecuteAsync(loggedUserId, petId, search);
@@ -33,7 +35,7 @@ namespace PetClinicApp.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<MedicalHistory>> Post([FromServices] CreateMedicalHistoryService createMedicalHistoryService, [FromBody] MedicalHistoryDTO medicalHistory)
+        public async Task<ActionResult<MedicalHistoryDTO>> Post([FromServices] CreateMedicalHistoryService createMedicalHistoryService, [FromBody] CreateMedicalHistoryDTO medicalHistory)
         {
             var loggedUserId = User.GetUserId();
 
@@ -43,7 +45,7 @@ namespace PetClinicApp.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult> Put([FromServices] UpdateMedicalHistoryService updateMedicalHistoryService, MedicalHistoryDTO medicalHistory)
+        public async Task<ActionResult> Put([FromServices] UpdateMedicalHistoryService updateMedicalHistoryService, UpdateMedicalHistoryDTO medicalHistory)
         {
             var loggedUserId = User.GetUserId();
 
@@ -53,7 +55,7 @@ namespace PetClinicApp.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<MedicalHistory>> Delete([FromServices] DeleteMedicalHistoryService deleteMedicalHistoryService, [FromRoute] long id)
+        public async Task<ActionResult<MedicalHistoryDTO>> Delete([FromServices] DeleteMedicalHistoryService deleteMedicalHistoryService, [FromRoute] long id)
         {
             var loggedUserId = User.GetUserId();
 
@@ -67,10 +69,11 @@ namespace PetClinicApp.Controllers
         {
             var loggedUserId = User.GetUserId();
 
-            var fileContentResult = await downloadHistoryAttachmentService.ExecuteAsync(loggedUserId, id);
+            var file = await downloadHistoryAttachmentService.ExecuteAsync(loggedUserId, id);
 
-            return fileContentResult;
+            
 
+            return File(file.Buffer, file.MimeType, file.FileName);
         }
 
         [HttpPost("{id}/attachment")]

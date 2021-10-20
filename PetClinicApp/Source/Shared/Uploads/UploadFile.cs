@@ -54,9 +54,20 @@ namespace PetClinicApp.Source.Shared.Uploads
                 var mimeType = MimeTypeMap.GetMimeType(extension);
 
                 var bytes = await File.ReadAllBytesAsync(fullPath);
-                return new FileModel(bytes, mimeType);
+                return new FileModel(bytes, mimeType, fileName);
             }
             return null;
+        }
+
+        public static void Delete(string folder, string fileName)
+        {
+            var path = AppDomain.CurrentDomain.BaseDirectory + "\\files\\" + folder + "\\";
+            var fullPath = path + fileName;
+
+            if (File.Exists(fullPath))
+            {
+                File.Delete(fullPath);
+            }
         }
     }
 }

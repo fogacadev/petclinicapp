@@ -168,6 +168,9 @@ namespace PetClinicApp
             services.AddTransient<FindMedicalHistoryService>();
             services.AddTransient<DeleteMedicalHistoryService>();
             services.AddTransient<ListMedicalHistoriesService>();
+            services.AddTransient<UploadHistoryAttachmentService>();
+            services.AddTransient<DownloadHistoryAttachmentService>();
+            services.AddTransient<DeleteHistoryAttachmentService>();
 
             //medical history type
             services.AddTransient<ListMedicalHistoryTypeService>();

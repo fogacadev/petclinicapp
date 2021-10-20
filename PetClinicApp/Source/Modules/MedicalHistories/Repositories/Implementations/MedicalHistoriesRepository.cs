@@ -46,11 +46,13 @@ namespace PetClinicApp.Source.Modules.MedicalHistories.Repositories.Implementati
 
         public async Task<List<MedicalHistory>> List(long petId, string search = "")
         {
-            return await appDbContext
+            var medicalHistories = await appDbContext
                 .MedicalHistories
-                .Where(m => m.PetId == petId && m.Title.Contains(search))
+                .Where(m => m.PetId == petId)
                 .AsNoTracking()
                 .ToListAsync();
+
+            return medicalHistories.AsQueryable().Filter(search).ToList();
         }
 
         public async Task Update(MedicalHistory medicalHistory)

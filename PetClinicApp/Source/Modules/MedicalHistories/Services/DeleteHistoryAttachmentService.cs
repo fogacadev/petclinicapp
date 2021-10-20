@@ -1,5 +1,6 @@
 ﻿using PetClinicApp.Source.Modules.MedicalHistories.Repositories;
 using PetClinicApp.Source.Shared.Errors;
+using PetClinicApp.Source.Shared.Uploads;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
@@ -28,12 +29,10 @@ namespace PetClinicApp.Source.Modules.MedicalHistories.Services
                 return;
             }
 
-            var path = "files\\history_attachment\\";
+            UploadFile.Delete("history_attachment", history.Attachment);
 
-            if (File.Exists($"{path}{history.Attachment}"))
-            {
-                File.Delete($"{path}{history.Attachment}");
-            }
+            history.Attachment = "";
+            await medicalHistoriesRepository.Update(history);
         }
     }
 }

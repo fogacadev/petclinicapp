@@ -23,10 +23,10 @@ namespace PetClinicApp.Source.Modules.MedicalHistories.Services
             this.petsRepository = petsRepository;
         }
 
-        public async Task<MedicalHistory> ExecuteAsync(long loggedUserId, MedicalHistoryDTO medicalHistory)
+        public async Task<MedicalHistoryDTO> ExecuteAsync(long loggedUserId, CreateMedicalHistoryDTO medicalHistory)
         {
             //verificar se o tipo de historico existe
-            var type = await medicalHistoriesRepository.Find(medicalHistory.HistoryTypeId);
+            var type = await medicalHistoryTypesRepository.Find(medicalHistory.HistoryTypeId);
             if(type == null)
             {
                 throw new AppErrorException("Medical history type does not exists.", HttpStatusCode.NotFound);
@@ -45,9 +45,9 @@ namespace PetClinicApp.Source.Modules.MedicalHistories.Services
 
             ValidateModel(medicalHistory);
 
-            var createdHistory = await medicalHistoriesRepository.Create(medicalHistory.ToModel());
+            var createdHistory = await medicalHistoriesRepository.Create(medicalHistory.ToEntity());
 
-            return createdHistory;
+            return createdHistory.ToDTO();
         }
     }
 }

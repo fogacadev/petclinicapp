@@ -1,9 +1,11 @@
-﻿using PetClinicApp.Source.Modules.MedicalHistories.Entities;
+﻿using PetClinicApp.Source.Modules.MedicalHistories.DTO;
+using PetClinicApp.Source.Modules.MedicalHistories.Entities;
 using PetClinicApp.Source.Modules.MedicalHistories.Repositories;
 using PetClinicApp.Source.Modules.Pets.Repositories;
 using PetClinicApp.Source.Modules.Pets.Repositories.Implementations;
 using PetClinicApp.Source.Shared.Errors;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -20,7 +22,7 @@ namespace PetClinicApp.Source.Modules.MedicalHistories.Services
             this.petsRepository = petsRepository;
         }
 
-        public async Task<List<MedicalHistory>> ExecuteAsync(long loggedUserId, long petId, string search)
+        public async Task<List<MedicalHistoryDTO>> ExecuteAsync(long loggedUserId, long petId, string search)
         {
             var pet = await petsRepository.Find(petId);
 
@@ -31,7 +33,7 @@ namespace PetClinicApp.Source.Modules.MedicalHistories.Services
 
             var medicalHistories = await medicalHistoriesRepository.List(petId, search);
 
-            return medicalHistories;
+            return medicalHistories.Select(m => m.ToDTO()).ToList();
         }
     }
 }

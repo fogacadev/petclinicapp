@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using MimeTypes;
 using PetClinicApp.Source.Modules.MedicalHistories.Repositories;
+using PetClinicApp.Source.Modules.Pets.Repositories;
 using PetClinicApp.Source.Shared.Errors;
+using PetClinicApp.Source.Shared.Uploads;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
@@ -11,9 +13,12 @@ namespace PetClinicApp.Source.Modules.MedicalHistories.Services
     public class UploadHistoryAttachmentService
     {
         private readonly IMedicalHistoriesRepository medicalHistoriesRepository;
-        public UploadHistoryAttachmentService(IMedicalHistoriesRepository medicalHistoriesRepository)
+        private readonly IPetsRepository petsRepository;
+        public UploadHistoryAttachmentService(IMedicalHistoriesRepository medicalHistoriesRepository,
+            IPetsRepository petsRepository)
         {
             this.medicalHistoriesRepository = medicalHistoriesRepository;
+            this.petsRepository = petsRepository;
         }
 
         public async Task ExecuteAsync(long loggedUserId, long historyId, IFormFile file)
@@ -24,36 +29,14 @@ namespace PetClinicApp.Source.Modules.MedicalHistories.Services
             {
                 throw new AppErrorException("Attachment does not exists", HttpStatusCode.NotFound);
             }
-            
-            var path = "files\\history_attachment\\";
 
-
-            //apaga o anexo antigo
-            if (!string.IsNullOrEmpty(history.Attachment))
+            var pet = await petsRepository.Find(history.PetId);
+            if(pet.UserId != loggedUserId)
             {
-                if (File.Exists($"{path}{history.Attachment}"))
-                {
-                    File.Delete($"{path}{history.Attachment}");
-                }
+                throw new AppErrorException("You are not allowed to perform this action", HttpStatusCode.Forbidden);
             }
 
-            if (!Directory.Exists(path))
-            {
-                Directory.CreateDirectory(path);
-            }
-
-            var extension = file.Name.Substring(file.Name.LastIndexOf('.'));
-            var newFileName = Path.GetRandomFileName();
-            newFileName = newFileName + extension;
-
-
-            using (var ms = new MemoryStream())
-            {
-                await file.CopyToAsync(ms);
-                await File.WriteAllBytesAsync($"{path}{newFileName}", ms.GetBuffer());
-            }
-
-            
+            var newFileName = await UploadFile.Upload("history_attachment", file, history.Attachment);
 
             history.Attachment = newFileName;
             await medicalHistoriesRepository.Update(history);

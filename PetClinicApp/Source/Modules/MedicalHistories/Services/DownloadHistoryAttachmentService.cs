@@ -2,7 +2,9 @@
 using MimeTypes;
 using PetClinicApp.Source.Modules.MedicalHistories.Entities;
 using PetClinicApp.Source.Modules.MedicalHistories.Repositories;
+using PetClinicApp.Source.Modules.Pets.Repositories;
 using PetClinicApp.Source.Shared.Errors;
+using PetClinicApp.Source.Shared.Uploads;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
@@ -12,40 +14,39 @@ namespace PetClinicApp.Source.Modules.MedicalHistories.Services
     public class DownloadHistoryAttachmentService
     {
         private readonly IMedicalHistoriesRepository medicalHistoriesRepository;
-        public DownloadHistoryAttachmentService(IMedicalHistoriesRepository medicalHistoriesRepository)
+        private readonly IPetsRepository petsRepository;
+        public DownloadHistoryAttachmentService(IMedicalHistoriesRepository medicalHistoriesRepository,
+            IPetsRepository petsRepository)
         {
             this.medicalHistoriesRepository = medicalHistoriesRepository;
+            this.petsRepository = petsRepository;
         }
 
         //FileContentResult
         //new FileContentResult(attachment, MediaTypeHeaderValue.Parse("application/octet-stream"));
-        public async Task<FileContentResult> ExecuteAsync(long loggedUserId, long id)
+        public async Task<FileModel> ExecuteAsync(long loggedUserId, long id)
         {
             var history = await medicalHistoriesRepository.Find(id);
-
             if (history == null)
             {
                 throw new AppErrorException("Attachment does not exists", HttpStatusCode.NotFound);
             }
 
-            var path = "files\\history_attachment\\";
-            var filename = $"{path}{history.Attachment}";
 
-            //apaga o anexo antigo
-            if (!string.IsNullOrEmpty(history.Attachment))
+            var pet = await petsRepository.Find(history.PetId);
+
+            if(pet.UserId != loggedUserId)
             {
-                if (File.Exists(filename))
-                {
-                    var extension = history.Attachment.Substring(history.Attachment.LastIndexOf('.'));
-                    extension = extension.Remove(0, 1);
-                    var mimeType = MimeTypeMap.GetMimeType(extension);
-
-                    var bytes = await File.ReadAllBytesAsync(filename);
-                    return new FileContentResult(bytes, mimeType);
-                }
+                throw new AppErrorException("You are not allowed to perform this action", HttpStatusCode.Forbidden);
             }
 
-            throw new AppErrorException("Attachment does not exists", HttpStatusCode.NotFound);
+            var file = await UploadFile.Download("history_attachment", history.Attachment);
+            if(file == null)
+            {
+                throw new AppErrorException("Attachment does not exists", HttpStatusCode.NotFound);
+            }
+
+            return file;
         }
     }
 }

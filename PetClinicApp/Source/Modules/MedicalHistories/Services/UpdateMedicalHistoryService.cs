@@ -23,15 +23,21 @@ namespace PetClinicApp.Source.Modules.MedicalHistories.Services
             this.petsRepository = petsRepository;
         }
 
-        public async Task ExecuteAsync(long loggedUserId, MedicalHistoryDTO medicalHistory)
+        public async Task ExecuteAsync(long loggedUserId, UpdateMedicalHistoryDTO medicalHistory)
         {
-            var type = await medicalHistoriesRepository.Find(medicalHistory.HistoryTypeId);
+            var history = await medicalHistoriesRepository.Find(medicalHistory.Id);
+            if (history == null)
+            {
+                throw new AppErrorException("History does not exists.");
+            }
+
+            var type = await medicalHistoryTypesRepository.Find(medicalHistory.HistoryTypeId);
             if (type == null)
             {
                 throw new AppErrorException("Medical history type does not exists.", HttpStatusCode.NotFound);
             }
 
-            var pet = await petsRepository.Find(medicalHistory.PetId);
+            var pet = await petsRepository.Find(history.PetId);
             if (pet == null)
             {
                 throw new AppErrorException("Pet does not exists.", HttpStatusCode.NotFound);
@@ -40,11 +46,16 @@ namespace PetClinicApp.Source.Modules.MedicalHistories.Services
             if (pet.UserId != loggedUserId)
             {
                 throw new AppErrorException("You are not allowed to perform this action.", HttpStatusCode.Forbidden);
-            }
+            }          
+
 
             ValidateModel(medicalHistory);
 
-            await medicalHistoriesRepository.Update(medicalHistory.ToModel());
+            history.Title = medicalHistory.Title;
+            history.Description = medicalHistory.Description;
+            history.HistoryTypeId = medicalHistory.HistoryTypeId;
+            history.ClinicId = medicalHistory.ClinicId;
+            await medicalHistoriesRepository.Update(history);
         }
     }
 }

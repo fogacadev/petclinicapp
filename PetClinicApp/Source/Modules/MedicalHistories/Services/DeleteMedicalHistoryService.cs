@@ -1,4 +1,5 @@
-﻿using PetClinicApp.Source.Modules.MedicalHistories.Entities;
+﻿using PetClinicApp.Source.Modules.MedicalHistories.DTO;
+using PetClinicApp.Source.Modules.MedicalHistories.Entities;
 using PetClinicApp.Source.Modules.MedicalHistories.Repositories;
 using PetClinicApp.Source.Modules.Pets.Repositories;
 using PetClinicApp.Source.Shared.Errors;
@@ -18,7 +19,7 @@ namespace PetClinicApp.Source.Modules.MedicalHistories.Services
             this.petsRepository = petsRepository;
         }
 
-        public async Task<MedicalHistory> ExecuteAsync(long loggedUserId, long id)
+        public async Task<MedicalHistoryDTO> ExecuteAsync(long loggedUserId, long id)
         {
             var medicalHistory = await medicalHistoriesRepository.Find(id);
 
@@ -35,7 +36,7 @@ namespace PetClinicApp.Source.Modules.MedicalHistories.Services
 
             await medicalHistoriesRepository.Delete(id);
 
-            return medicalHistory;
+            return medicalHistory.ToDTO();
         }
     }
 }
