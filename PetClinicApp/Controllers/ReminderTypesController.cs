@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PetClinicApp.Source.Modules.Reminders.DTO;
 using PetClinicApp.Source.Modules.Reminders.Entities;
 using PetClinicApp.Source.Modules.Reminders.Services;
@@ -10,11 +11,12 @@ namespace PetClinicApp.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
+    [Authorize]
     public class ReminderTypesController : ControllerBase
     {
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ReminderType>> Get([FromServices] FindReminderTypeService findReminderTypeService, [FromRoute] long id)
+        public async Task<ActionResult<ReminderTypeDTO>> Get([FromServices] FindReminderTypeService findReminderTypeService, [FromRoute] long id)
         {
             var type = await findReminderTypeService.ExecuteAsync(id);
 
@@ -22,7 +24,7 @@ namespace PetClinicApp.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<ReminderType>>> Get([FromServices] ListReminderTypesService listReminderTypesService, [FromQuery] string search)
+        public async Task<ActionResult<List<ReminderTypeDTO>>> Get([FromServices] ListReminderTypesService listReminderTypesService, [FromQuery] string search)
         {
             var types = await listReminderTypesService.ExecuteAsync(search);
 
@@ -30,7 +32,7 @@ namespace PetClinicApp.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ReminderType>> Post([FromServices] CreateReminderTypeService createReminderTypeService, ReminderTypeDTO reminderType)
+        public async Task<ActionResult<ReminderTypeDTO>> Post([FromServices] CreateReminderTypeService createReminderTypeService, CreateReminderTypeDTO reminderType)
         {
             var type = await createReminderTypeService.ExecuteAsync(reminderType);
 
@@ -38,7 +40,7 @@ namespace PetClinicApp.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult> Put([FromServices] UpdateReminderTypeService updateReminderTypeService, ReminderTypeDTO reminderType)
+        public async Task<ActionResult> Put([FromServices] UpdateReminderTypeService updateReminderTypeService, UpdateReminderTypeDTO reminderType)
         {
             await updateReminderTypeService.ExecuteAsync(reminderType);
 
@@ -46,10 +48,9 @@ namespace PetClinicApp.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<ReminderType>> Delete([FromServices] DeleteReminderTypeService deleteReminderTypeService, [FromRoute] long id)
+        public async Task<ActionResult<ReminderTypeDTO>> Delete([FromServices] DeleteReminderTypeService deleteReminderTypeService, [FromRoute] long id)
         {
-            var loggedUserId = User.GetUserId();
-            var type = await deleteReminderTypeService.ExecuteAsync(loggedUserId, id);
+            var type = await deleteReminderTypeService.ExecuteAsync(id);
 
             return Ok(type);
         }

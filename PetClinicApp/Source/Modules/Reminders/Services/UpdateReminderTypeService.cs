@@ -1,7 +1,9 @@
 ﻿using PetClinicApp.Source.Modules.Reminders.DTO;
 using PetClinicApp.Source.Modules.Reminders.Entities;
 using PetClinicApp.Source.Modules.Reminders.Repositories;
+using PetClinicApp.Source.Shared.Errors;
 using PetClinicApp.Source.Shared.Services;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace PetClinicApp.Source.Modules.Reminders.Services
@@ -15,11 +17,20 @@ namespace PetClinicApp.Source.Modules.Reminders.Services
             this.reminderTypesRepository = reminderTypesRepository;
         }
 
-        public async Task ExecuteAsync(ReminderTypeDTO reminderType)
+        public async Task ExecuteAsync(UpdateReminderTypeDTO reminderType)
         {
             ValidateModel(reminderType);
 
-            await reminderTypesRepository.Update(reminderType.ToModel());
+            var createdType = await reminderTypesRepository.Find(reminderType.Id);
+
+            if(createdType == null)
+            {
+                throw new AppErrorException("Reminder type does not exists.", HttpStatusCode.NotFound);
+            }
+
+            createdType.Name = reminderType.Name;
+
+            await reminderTypesRepository.Update(createdType);
         }
     }
 }

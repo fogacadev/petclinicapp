@@ -1,4 +1,5 @@
-﻿using PetClinicApp.Source.Modules.Reminders.Entities;
+﻿using PetClinicApp.Source.Modules.Reminders.DTO;
+using PetClinicApp.Source.Modules.Reminders.Entities;
 using PetClinicApp.Source.Modules.Reminders.Repositories;
 using PetClinicApp.Source.Shared.Errors;
 using System.Net;
@@ -14,7 +15,7 @@ namespace PetClinicApp.Source.Modules.Reminders.Services
             this.reminderTypesRepository = reminderTypesRepository;
         }
 
-        public async Task<ReminderType> ExecuteAsync(long id)
+        public async Task<ReminderTypeDTO> ExecuteAsync(long id)
         {
             var reminderType = await reminderTypesRepository.Find(id);
 
@@ -23,7 +24,7 @@ namespace PetClinicApp.Source.Modules.Reminders.Services
                 throw new AppErrorException("Reminder type does not exists", HttpStatusCode.NotFound);
             }
 
-            return reminderType;
+            return reminderType.ToDTO();
         }
     }
 }

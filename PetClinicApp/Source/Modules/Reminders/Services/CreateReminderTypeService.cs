@@ -14,13 +14,13 @@ namespace PetClinicApp.Source.Modules.Reminders.Services
             this.reminderTypesRepository = reminderTypesRepository;
         }
 
-        public async Task<ReminderType> ExecuteAsync(ReminderTypeDTO reminderType)
+        public async Task<ReminderTypeDTO> ExecuteAsync(CreateReminderTypeDTO reminderType)
         {
-            ModelIsValid(reminderType);
+            ValidateModel(reminderType);
 
-            var createdReminder = await reminderTypesRepository.Create(reminderType.ToModel());
+            var createdReminder = await reminderTypesRepository.Create(reminderType.ToEntity());
 
-            return createdReminder;
+            return createdReminder.ToDTO();
         }
     }
 }

@@ -73,3 +73,5 @@ C:\Desenvolvimento\.net\PetClinicApp\PetClinicApp\bin\Debug\netcoreapp3.1\Micros
 C:\Desenvolvimento\.net\PetClinicApp\PetClinicApp\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Tokens.dll
 C:\Desenvolvimento\.net\PetClinicApp\PetClinicApp\bin\Debug\netcoreapp3.1\System.IdentityModel.Tokens.Jwt.dll
 C:\Desenvolvimento\.net\PetClinicApp\PetClinicApp\obj\Debug\netcoreapp3.1\PetClinicApp.csproj.AssemblyReference.cache
+C:\Desenvolvimento\.net\PetClinicApp\PetClinicApp\bin\Debug\netcoreapp3.1\xunit.abstractions.dll
+C:\Desenvolvimento\.net\PetClinicApp\PetClinicApp\bin\Debug\netcoreapp3.1\xunit.core.dll

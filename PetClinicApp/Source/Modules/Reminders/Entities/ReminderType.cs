@@ -15,7 +15,24 @@ namespace PetClinicApp.Source.Modules.Reminders.Entities
 
     public static class ReminderTypeExtensions
     {
-        public static ReminderType ToModel(this ReminderTypeDTO reminderType)
+        public static ReminderType ToEntity(this ReminderTypeDTO reminderType)
+        {
+            return new ReminderType
+            {
+                Id = reminderType.Id,
+                Name = reminderType.Name
+            };
+        }
+
+        public static ReminderType ToEntity(this CreateReminderTypeDTO reminderType)
+        {
+            return new ReminderType
+            {
+                Name = reminderType.Name
+            };
+        }
+
+        public static ReminderType ToEntity(this UpdateReminderTypeDTO reminderType)
         {
             return new ReminderType
             {
@@ -31,6 +48,18 @@ namespace PetClinicApp.Source.Modules.Reminders.Entities
                 Id = reminderType.Id,
                 Name = reminderType.Name
             };
+        }
+
+        public static IQueryable<ReminderType> Filter(this IQueryable<ReminderType> query, string search)
+        {
+            if (!string.IsNullOrEmpty(search))
+            {
+                search = search.ToUpper();
+
+                query = query.Where(r => r.Name.ToUpper().Contains(search));
+            }
+
+            return query;
         }
     }
 }

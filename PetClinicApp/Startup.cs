@@ -153,6 +153,13 @@ namespace PetClinicApp
             services.AddTransient<ListRemindersService>();
             services.AddTransient<UpdateReminderService>();
             services.AddTransient<ListReminderByUserService>();
+
+            //reminder types
+            services.AddTransient<CreateReminderTypeService>();
+            services.AddTransient<DeleteReminderTypeService>();
+            services.AddTransient<FindReminderTypeService>();
+            services.AddTransient<ListReminderTypesService>();
+            services.AddTransient<UpdateReminderTypeService>();
         }
 
         public void ConfigureAppRepositories(IServiceCollection services ) {

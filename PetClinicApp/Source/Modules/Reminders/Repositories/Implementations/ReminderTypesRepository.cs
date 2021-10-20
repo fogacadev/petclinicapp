@@ -48,10 +48,12 @@ namespace PetClinicApp.Source.Modules.Reminders.Repositories.Implementations
 
         public async Task<List<ReminderType>> List(string search = "")
         {
-            return await appDbContext
+            var reminders = await appDbContext
                 .ReminderTypes
                 .AsNoTracking()
-                .Where(t => t.Name.Contains(search)).ToListAsync();
+                .ToListAsync();
+
+            return reminders.AsQueryable().Filter(search).ToList();
         }
 
         public async Task Update(ReminderType reminderType)
