@@ -115,6 +115,8 @@ namespace PetClinicApp
             services.AddTransient<UpdateUserService>();
             services.AddTransient<UploadAccountAvatarService>();
             services.AddTransient<DownloadAccountAvatarService>();
+            services.AddTransient<FindLoggedUserService>();
+
             //Clinics
             services.AddTransient<CreateClinicService>();
             services.AddTransient<CreateClinicServiceSerivice>();
@@ -139,7 +141,7 @@ namespace PetClinicApp
             services.AddTransient<UpdateAnimalService>();
             services.AddTransient<UpdatePetService>();
             services.AddTransient<UploadAvatarService>();
-
+            services.AddTransient<DownloadAvatarService>();
             //reminders
             services.AddTransient<CreateReminderService>();
             services.AddTransient<DeleteReminderService>();
@@ -147,6 +149,7 @@ namespace PetClinicApp
             services.AddTransient<FinishReminderService>();
             services.AddTransient<ListRemindersService>();
             services.AddTransient<UpdateReminderService>();
+            services.AddTransient<ListReminderByUserService>();
         }
 
         public void ConfigureAppRepositories(IServiceCollection services ) {

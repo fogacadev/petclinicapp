@@ -1,4 +1,5 @@
-﻿using PetClinicApp.Source.Modules.Pets.Entities;
+﻿using PetClinicApp.Source.Modules.Pets.DTO;
+using PetClinicApp.Source.Modules.Pets.Entities;
 using PetClinicApp.Source.Modules.Pets.Repositories;
 using PetClinicApp.Source.Shared.Errors;
 using PetClinicApp.Source.Shared.Services;
@@ -18,7 +19,7 @@ namespace PetClinicApp.Source.Modules.Pets.Services
             this.petsRepository = petsRepository;
         }
 
-        public async Task<Pet> ExcuteAsync(long userId, long id)
+        public async Task<PetDTO> ExcuteAsync(long userId, long id)
         {
             var pet = await petsRepository.Find(id);
 
@@ -32,7 +33,7 @@ namespace PetClinicApp.Source.Modules.Pets.Services
                 throw new AppErrorException("Pet does not exists.");
             }
 
-            return pet;
+            return pet.ToDTO();
         }
     }
 }

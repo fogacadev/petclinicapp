@@ -37,5 +37,56 @@ namespace PetClinicApp.Source.Modules.Reminders.Entities
                 CreatedAt = reminder.CreatedAt
             };
         }
+
+        public static ReminderDTO ToDTO(this Reminder reminder)
+        {
+            return new ReminderDTO
+            {
+                Id = reminder.Id,
+                ReminderDate = reminder.ReminderDate,
+                ReminderTypeId = reminder.ReminderTypeId,
+                Title = reminder.Title,
+                Description = reminder.Description,
+                PetId = reminder.PetId,
+                Finished = reminder.Finished,
+                CreatedAt = reminder.CreatedAt
+            };
+        }
+
+        public static Reminder ToEntity(this CreateReminderDTO reminder)
+        {
+            return new Reminder
+            {
+                ReminderDate = reminder.ReminderDate,
+                ReminderTypeId = reminder.ReminderTypeId,
+                Title = reminder.Title,
+                Description = reminder.Description,
+                PetId = reminder.PetId,
+            };
+        }
+
+        public static Reminder ToEntity(this UpdateReminderDTO reminder)
+        {
+            return new Reminder
+            {
+                Id = reminder.Id,
+                ReminderDate = reminder.ReminderDate,
+                ReminderTypeId = reminder.ReminderTypeId,
+                Title = reminder.Title,
+                Description = reminder.Description,
+            };
+        }
+
+        public static IQueryable<Reminder> Filter(this IQueryable<Reminder> query, string search)
+        {
+            if (!string.IsNullOrEmpty(search))
+            {
+                search = search.ToUpper();
+
+                query = query.Where(r => r.Title.ToUpper().Contains(search) || r.Description.ToUpper().Contains(search));
+            }
+
+            return query;
+        }
     }
 }

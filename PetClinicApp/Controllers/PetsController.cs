@@ -6,11 +6,13 @@ using PetClinicApp.Source.Modules.Pets.Services;
 using PetClinicApp.Source.Modules.Pets.DTO;
 using PetClinicApp.Source.Shared.Jwt;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PetClinicApp.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
+    [Authorize]
     public class PetsController : ControllerBase
     {
         
@@ -36,21 +38,21 @@ namespace PetClinicApp.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Pet>> Create([FromServices] CreatePetService createPetService, [FromBody] PetDTO pet)
+        public async Task<ActionResult<PetDTO>> Create([FromServices] CreatePetService createPetService, [FromBody] CreatePetDTO pet)
         {
             var loggedUserId = User.GetUserId();
 
-            var createdPet = await createPetService.ExecuteAsync(pet);
+            var createdPet = await createPetService.ExecuteAsync(loggedUserId, pet);
 
             return Ok(createdPet);
         }
 
         [HttpPut]
-        public async Task<ActionResult> Update([FromServices] UpdatePetService updatePetService, [FromBody] PetDTO pet)
+        public async Task<ActionResult> Update([FromServices] UpdatePetService updatePetService, [FromBody] UpdatePetDTO pet)
         {
             var loggedUserId = User.GetUserId();
 
-            await updatePetService.ExecuteAsync(pet);
+            await updatePetService.ExecuteAsync(loggedUserId, pet);
 
             return NoContent();
         }
@@ -60,7 +62,7 @@ namespace PetClinicApp.Controllers
         {
             var loggedUserId = User.GetUserId();
 
-            var pet = await deletePetService.ExecuteAsync(id);
+            var pet = await deletePetService.ExecuteAsync(loggedUserId, id);
 
             return Ok(pet);
         }
@@ -80,9 +82,9 @@ namespace PetClinicApp.Controllers
         {
             var loggedUserId = User.GetUserId();
 
-            var fileContentResult = await downloadAvatarService.ExecuteAsync(loggedUserId, id);
+            var file = await downloadAvatarService.ExecuteAsync(loggedUserId, id);
 
-            return fileContentResult;
+            return File(file.Buffer, file.MimeType);
         }
     }
 }

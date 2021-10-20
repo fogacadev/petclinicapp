@@ -17,13 +17,13 @@ namespace PetClinicApp.Source.Modules.Clinics.Services
             this.clinicsRepository = clinicsRepository;
         }
 
-        public async Task<Clinic> ExecuteAsync(ClinicDTO clinic)
+        public async Task<ClinicDTO> ExecuteAsync(CreateClinicDTO clinic)
         {
             ValidateModel(clinic);
 
             var createdClinic = await clinicsRepository.Create(clinic.ToEntity());
 
-            return createdClinic;
+            return createdClinic.ToDTO();
         }
     }
 }

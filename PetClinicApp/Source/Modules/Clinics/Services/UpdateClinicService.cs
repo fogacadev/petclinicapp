@@ -19,7 +19,7 @@ namespace PetClinicApp.Source.Modules.Clinics.Services
             this.clinicsRepository = clinicsRepository;
         }
 
-        public async Task ExecuteAsync(ClinicDTO clinic)
+        public async Task ExecuteAsync(UpdateClinicDTO clinic)
         {
             ValidateModel(clinic);
 
@@ -29,7 +29,15 @@ namespace PetClinicApp.Source.Modules.Clinics.Services
                 throw new AppErrorException("Clinic does not exists.", HttpStatusCode.NotFound);
             }
 
-            await clinicsRepository.Update(clinic.ToEntity());
+            clinicExists.Descripton = clinic.Descripton;
+            clinicExists.Name = clinic.Name;
+            clinicExists.Address = clinic.Address;
+            clinicExists.City = clinic.City;
+            clinicExists.ZipCode = clinic.ZipCode;
+            clinicExists.State = clinic.State;
+            clinicExists.PhoneNumber = clinic.PhoneNumber;
+
+            await clinicsRepository.Update(clinicExists);
         }
     }
 }

@@ -45,22 +45,22 @@ namespace PetClinicApp.Source.Modules.Reminders.Repositories.Implementations
                 .FirstOrDefaultAsync(r => r.Id == id);
         }
 
-        public Task<List<Reminder>> ListByPetId(long petId, string search = "")
+        public async Task<List<Reminder>> ListByPetId(long petId, string search = "")
         {
-            return appDbContext
-                .Reminders
-                .Where(p => p.PetId == petId && (p.Title.Contains(search) || p.Description.Contains(search)))
-                .AsNoTracking()
-                .ToListAsync();
+            var reminders = await appDbContext.Reminders.Where(p => p.PetId == petId).AsNoTracking().ToListAsync();
+
+            return reminders.AsQueryable().Filter(search).ToList();
         }
 
         public async Task<List<Reminder>> ListByUserId(long userId, string search = "")
         {
-            return await appDbContext
+            var reminders = await appDbContext
                 .Reminders
-                .Where(r => r.Pet.UserId == userId && (r.Title.Contains(search) || r.Description.Contains(search)))
+                .Where(r => r.Pet.UserId == userId)
                 .AsNoTracking()
                 .ToListAsync();
+
+            return reminders.AsQueryable().Filter(search).ToList();
         }
 
         public async Task Update(Reminder reminder)

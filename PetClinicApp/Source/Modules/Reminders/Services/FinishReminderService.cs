@@ -1,4 +1,6 @@
-﻿using PetClinicApp.Source.Modules.Reminders.Repositories;
+﻿using PetClinicApp.Source.Modules.Reminders.DTO;
+using PetClinicApp.Source.Modules.Reminders.Entities;
+using PetClinicApp.Source.Modules.Reminders.Repositories;
 using PetClinicApp.Source.Shared.Errors;
 using System;
 using System.Collections.Generic;
@@ -16,7 +18,7 @@ namespace PetClinicApp.Source.Modules.Reminders.Services
             this.remindersRepository = remindersRepository;
         }
 
-        public async Task ExecuteAsync(long id)
+        public async Task<ReminderDTO> ExecuteAsync(long id)
         {
             var reminder = await remindersRepository.Find(id);
 
@@ -28,6 +30,8 @@ namespace PetClinicApp.Source.Modules.Reminders.Services
             reminder.Finished = true;
 
             await remindersRepository.Update(reminder);
+
+            return reminder.ToDTO();
         }
     }
 }

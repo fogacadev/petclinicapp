@@ -26,7 +26,7 @@ namespace PetClinicApp.Controllers
 
         [AllowAnonymous]
         [HttpPost("refresh-token")]
-        public async Task<ActionResult<Access>> RefreshToken([FromServices] RefreshTokenService refreshTokenService, [FromHeader] string refreshToken)
+        public async Task<ActionResult<Access>> RefreshToken([FromServices] RefreshTokenService refreshTokenService, [FromQuery] string refreshToken)
         {
             var access = await refreshTokenService.ExecuteAsync(refreshToken);
 

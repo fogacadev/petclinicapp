@@ -12,14 +12,14 @@ namespace PetClinicApp.Controllers
     public class ClinicsController : ControllerBase
     {
         [HttpGet("{id}")]
-        public async Task<ActionResult<Clinic>> Get([FromServices] FindClinicService findClinicService, [FromRoute]long id)
+        public async Task<ActionResult<ClinicDTO>> Get([FromServices] FindClinicService findClinicService, [FromRoute]long id)
         {
             var clinic = await findClinicService.ExecuteAsync(id);
             return Ok(clinic);
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Clinic>>> Get([FromServices] ListClinicsService listClinicsService, [FromQuery] string search)
+        public async Task<ActionResult<List<ClinicDTO>>> Get([FromServices] ListClinicsService listClinicsService, [FromQuery] string search)
         {
             var clinics = await listClinicsService.ExecuteAsync(search);
 
@@ -27,7 +27,7 @@ namespace PetClinicApp.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Clinic>> Post([FromServices] CreateClinicService createClinicService, [FromBody] ClinicDTO clinic)
+        public async Task<ActionResult<ClinicDTO>> Post([FromServices] CreateClinicService createClinicService, [FromBody] CreateClinicDTO clinic)
         {
             var createdClinic = await createClinicService.ExecuteAsync(clinic);
 
@@ -35,7 +35,7 @@ namespace PetClinicApp.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult> Put([FromServices] UpdateClinicService updateClinicService, [FromBody] ClinicDTO clinic)
+        public async Task<ActionResult> Put([FromServices] UpdateClinicService updateClinicService, [FromBody] UpdateClinicDTO clinic)
         {
             await updateClinicService.ExecuteAsync(clinic);
 
@@ -43,7 +43,7 @@ namespace PetClinicApp.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Clinic>> Delete([FromServices] DeleteClinicService deleteClinicService, [FromRoute] long id)
+        public async Task<ActionResult<ClinicDTO>> Delete([FromServices] DeleteClinicService deleteClinicService, [FromRoute] long id)
         {
             var clinic = await deleteClinicService.ExecuteAsync(id);
 

@@ -27,7 +27,7 @@ namespace PetClinicApp.Source.Modules.Pets.Services
             this.usersRepository = usersRepository;
         }
 
-        public async Task<Pet> ExecuteAsync(PetDTO pet)
+        public async Task<PetDTO> ExecuteAsync(long loggedUserId, CreatePetDTO pet)
         {
             ValidateModel(pet);
 
@@ -38,19 +38,21 @@ namespace PetClinicApp.Source.Modules.Pets.Services
                 throw new AppErrorException("Animal does not exists", HttpStatusCode.NotFound);
             }
 
-            var userExists = await usersRepository.Find(pet.UserId);
+            var userExists = await usersRepository.Find(loggedUserId);
             if(userExists == null)
             {
                 throw new AppErrorException("User does not exists", HttpStatusCode.NotFound);
             }
 
             var createPet = pet.ToEntity();
+            createPet.UserId = loggedUserId;
             createPet.CreatedAt = DateTime.Now;
+
 
             var createdPet = await petsRepository.Create(createPet);
 
 
-            return createdPet;
+            return createdPet.ToDTO();
         }
     }
 }

@@ -28,8 +28,7 @@ namespace PetClinicApp.Source.Modules.Accounts.Entities
                 BirthDate = user.BirthDate,
                 CreatedAt = user.CreatedAt,
                 Email = user.Email,
-                FullName = user.FullName,
-                Avatar = user.Avatar
+                FullName = user.FullName
             };
         }
 
@@ -41,8 +40,7 @@ namespace PetClinicApp.Source.Modules.Accounts.Entities
                 BirthDate = account.BirthDate,
                 CreatedAt = account.CreatedAt,
                 Email = account.Email,
-                FullName = account.FullName,
-                Avatar = account.Avatar
+                FullName = account.FullName
             };
         }
     }

@@ -11,7 +11,6 @@ namespace PetClinicApp.Source.Modules.Accounts.Models
         public string FullName { get; set; }
         public string Email { get; set; }
         public DateTime BirthDate { get; set; }
-        public string Avatar { get; set; }
         public DateTime? CreatedAt { get; set; }
     }
 }

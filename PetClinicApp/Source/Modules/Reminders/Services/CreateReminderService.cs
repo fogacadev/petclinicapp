@@ -27,7 +27,7 @@ namespace PetClinicApp.Source.Modules.Reminders.Services
             this.reminderTypesRepository = reminderTypesRepository;
         }
 
-        public async Task<Reminder> ExecuteAsync(ReminderDTO reminderDTO)
+        public async Task<ReminderDTO> ExecuteAsync(CreateReminderDTO reminderDTO)
         {
             ValidateModel(reminderDTO);
 
@@ -45,9 +45,12 @@ namespace PetClinicApp.Source.Modules.Reminders.Services
                 throw new AppErrorException("Reminder type does not exists", HttpStatusCode.NotFound);
             }
 
+            reminder.CreatedAt = DateTime.Now;
+            reminder.Finished = false;
+
             var createdReminder = await remindersRepository.Create(reminder);
 
-            return createdReminder;
+            return createdReminder.ToDTO();
         }
     }
 }

@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace PetClinicApp.Source.Modules.Clinics.DTO
 {
-    public class ClinicDTO
+    public class UpdateClinicDTO
     {
         public long Id { get; set; }
+        [Required(ErrorMessage = "The name field is required")]
         public string Name { get; set; }
+        [Required(ErrorMessage = "The description field is mandatory")]
         public string Descripton { get; set; }
         public string Address { get; set; }
         public string City { get; set; }

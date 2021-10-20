@@ -11,6 +11,11 @@ namespace PetClinicApp.Source.Modules.Clinics.Entities
         public long Id { get; set; }
         public string Name { get; set; }
         public string Descripton { get; set; }
+        public string Address { get; set; }
+        public string City { get; set; }
+        public string ZipCode { get; set; }
+        public string State { get; set; }
+        public string PhoneNumber { get; set; }
         public string Avatar { get; set; }
 
         public List<ClinicService> Services { get; set; }
@@ -25,7 +30,11 @@ namespace PetClinicApp.Source.Modules.Clinics.Entities
                 Id = clinic.Id,
                 Name = clinic.Name,
                 Descripton = clinic.Descripton,
-                Avatar = clinic.Avatar
+                PhoneNumber = clinic.PhoneNumber,
+                Address = clinic.Address,
+                City = clinic.City,
+                ZipCode = clinic.ZipCode,
+                State = clinic.State,
             };
         }
 
@@ -36,8 +45,53 @@ namespace PetClinicApp.Source.Modules.Clinics.Entities
                 Id = clinic.Id,
                 Name = clinic.Name,
                 Descripton = clinic.Descripton,
-                Avatar = clinic.Avatar
+                PhoneNumber = clinic.PhoneNumber,
+                Address = clinic.Address,
+                City = clinic.City,
+                ZipCode = clinic.ZipCode,
+                State = clinic.State,
             };
+        }
+
+        public static Clinic ToEntity(this CreateClinicDTO clinic)
+        {
+            return new Clinic
+            {
+                Name = clinic.Name,
+                Descripton = clinic.Descripton,
+                PhoneNumber = clinic.PhoneNumber,
+                Address = clinic.Address,
+                City = clinic.City,
+                ZipCode = clinic.ZipCode,
+                State = clinic.State,
+            };
+        }
+
+        public static Clinic ToEntity(this UpdateClinicDTO clinic)
+        {
+            return new Clinic
+            {
+                Id = clinic.Id,
+                Name = clinic.Name,
+                Descripton = clinic.Descripton,
+                PhoneNumber = clinic.PhoneNumber,
+                Address = clinic.Address,
+                City = clinic.City,
+                ZipCode = clinic.ZipCode,
+                State = clinic.State,
+            };
+        }
+
+        public static IQueryable<Clinic> Filter(this IQueryable<Clinic> query, string search)
+        {
+            if (!string.IsNullOrEmpty(search))
+            {
+                search = search.ToUpper();
+
+                query = query.Where(c => c.Name.ToUpper().Contains(search) || c.Descripton.ToUpper().Contains(search));
+            }
+
+            return query;
         }
     }
 }

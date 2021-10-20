@@ -26,7 +26,7 @@ namespace PetClinicApp.Source.Modules.Reminders.Services
             this.reminderTypesRepository = reminderTypesRepository;
         }
 
-        public async Task ExecuteAsync(ReminderDTO reminderDTO)
+        public async Task ExecuteAsync(UpdateReminderDTO reminderDTO)
         {
             ValidateModel(reminderDTO);
 
@@ -39,12 +39,6 @@ namespace PetClinicApp.Source.Modules.Reminders.Services
                 throw new AppErrorException("Reminder does not exists", HttpStatusCode.NotFound);
             }
 
-            var petExists = await petsRepository.Find(reminder.PetId);
-            if (petExists == null)
-            {
-                throw new AppErrorException("Pet does not exists", HttpStatusCode.NotFound);
-            }
-
 
             var reminderTypeExists = await reminderTypesRepository.Find(reminder.ReminderTypeId);
             if (reminderTypeExists == null)
@@ -53,11 +47,13 @@ namespace PetClinicApp.Source.Modules.Reminders.Services
             }
 
 
-            reminder.PetId = createdReminder.PetId;
-            reminder.CreatedAt = createdReminder.CreatedAt;
-            reminder.Finished = createdReminder.Finished;
+            createdReminder.ReminderDate = reminder.ReminderDate;
+            createdReminder.ReminderTypeId = reminder.ReminderTypeId;
+            createdReminder.Title = reminder.Title;
+            createdReminder.Description = reminder.Description;
+            
 
-            await remindersRepository.Update(reminder);
+            await remindersRepository.Update(createdReminder);
         }
     }
 }

@@ -30,9 +30,17 @@ namespace PetClinicApp.Source.Modules.Pets.Entities
                 Name = pet.Name,
                 BornIn = pet.BornIn,
                 AnimalId = pet.AnimalId,
-                UserId = pet.UserId,
-                Avatar = pet.Avatar,
                 CreatedAt = pet.CreatedAt
+            };
+        }
+
+        public static Pet ToEntity(this CreatePetDTO pet)
+        {
+            return new Pet
+            {
+                Name = pet.Name,
+                BornIn = pet.BornIn,
+                AnimalId = pet.AnimalId,
             };
         }
 
@@ -44,10 +52,18 @@ namespace PetClinicApp.Source.Modules.Pets.Entities
                 Name = pet.Name,
                 BornIn = pet.BornIn,
                 AnimalId = pet.AnimalId,
-                UserId = pet.UserId,
-                Avatar = pet.Avatar,
                 CreatedAt = pet.CreatedAt
             };
+        }
+
+        public static IQueryable<Pet> Filter(this IQueryable<Pet> query, string search)
+        {
+            if (!string.IsNullOrEmpty(search))
+            {
+                query = query.Where(p => p.Name.ToUpper().Contains(search.ToUpper()));
+            }
+
+            return query;
         }
     }
 } 

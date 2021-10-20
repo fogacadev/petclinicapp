@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using PetClinicApp.Source.Modules.Pets.Repositories;
 using PetClinicApp.Source.Shared.Errors;
+using PetClinicApp.Source.Shared.Uploads;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -27,34 +28,12 @@ namespace PetClinicApp.Source.Modules.Pets.Services
                 throw new AppErrorException("Pet does not exists", HttpStatusCode.NotFound);
             }
 
-            var path = "files\\pet_avatar\\";
-
-            //apaga o arquivo antigo
-            if (string.IsNullOrEmpty(pet.Avatar))
+            if(pet.UserId != loggedUserId)
             {
-                var oldFileName = path + pet.Avatar;
-                if (File.Exists(oldFileName)){
-                    File.Delete(oldFileName);
-                }
+                throw new AppErrorException("You are not allowed to perform this action.", HttpStatusCode.Forbidden);
             }
 
-            //sava o novo arquivo
-
-            if (!Directory.Exists(path))
-            {
-                Directory.CreateDirectory(path);
-            }
-
-            var extension = file.Name.Substring(file.Name.LastIndexOf('.'));
-            var newFileName = Path.GetRandomFileName();
-            newFileName = newFileName + extension;
-
-
-            using (var ms = new MemoryStream())
-            {
-                await file.CopyToAsync(ms);
-                await File.WriteAllBytesAsync($"{path}{newFileName}", ms.GetBuffer());
-            }
+            var newFileName = await UploadFile.Upload("pet_avatar", file, pet.Avatar);
 
             pet.Avatar = newFileName;
             await petsRepository.Update(pet);

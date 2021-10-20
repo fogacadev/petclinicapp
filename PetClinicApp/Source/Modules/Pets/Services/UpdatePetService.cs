@@ -27,7 +27,7 @@ namespace PetClinicApp.Source.Modules.Pets.Services
             this.usersRepository = usersRepository;
         }
 
-        public async Task ExecuteAsync(PetDTO pet)
+        public async Task ExecuteAsync(long loggedUserId, UpdatePetDTO pet)
         {
             ValidateModel(pet);
 
@@ -38,7 +38,7 @@ namespace PetClinicApp.Source.Modules.Pets.Services
                 throw new AppErrorException("Animal does not exists", HttpStatusCode.NotFound);
             }
 
-            var userExists = await usersRepository.Find(pet.UserId);
+            var userExists = await usersRepository.Find(loggedUserId);
             if (userExists == null)
             {
                 throw new AppErrorException("User does not exists", HttpStatusCode.NotFound);
@@ -46,11 +46,22 @@ namespace PetClinicApp.Source.Modules.Pets.Services
 
             var createdPet = await petsRepository.Find(pet.Id);
 
-            var updatePet = pet.ToEntity();
-            updatePet.CreatedAt = createdPet.CreatedAt;
+            if(createdPet == null)
+            {
+                throw new AppErrorException("Pet does not exists.", HttpStatusCode.NotFound);
+            }
+
+            if(createdPet.UserId != loggedUserId)
+            {
+                throw new AppErrorException("You do not have permission to perform this action.", HttpStatusCode.Forbidden);
+            }
+
+            createdPet.Name = pet.Name;
+            createdPet.AnimalId = pet.AnimalId;
+            createdPet.BornIn = pet.BornIn;
 
 
-            await petsRepository.Update(updatePet);
+            await petsRepository.Update(createdPet);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using PetClinicApp.Source.Modules.Accounts.Repositories;
 using PetClinicApp.Source.Shared.Errors;
+using PetClinicApp.Source.Shared.Uploads;
 using System;
 using System.IO;
 using System.Net;
@@ -25,35 +26,8 @@ namespace PetClinicApp.Source.Modules.Accounts.Services
                 throw new AppErrorException("Account does not exists", HttpStatusCode.NotFound);
             }
 
-            var path = AppDomain.CurrentDomain.BaseDirectory + "\\files\\account_avatar\\";
 
-            //apaga o arquivo antigo
-            if (!string.IsNullOrEmpty(user.Avatar))
-            {
-                var oldFileName = path + user.Avatar;
-                if (File.Exists(oldFileName))
-                {
-                    File.Delete(oldFileName);
-                }
-            }
-
-            //sava o novo arquivo
-
-            if (!Directory.Exists(path))
-            {
-                Directory.CreateDirectory(path);
-            }
-
-            var extension = file.FileName.Substring(file.FileName.LastIndexOf('.'));
-            var newFileName = Path.GetRandomFileName();
-            newFileName = newFileName + extension;
-
-
-            using (var ms = new MemoryStream())
-            {
-                await file.CopyToAsync(ms);
-                await File.WriteAllBytesAsync($"{path}{newFileName}", ms.GetBuffer());
-            }
+            var newFileName = await UploadFile.Upload("account_avatar", file);
 
             user.Avatar = newFileName;
             await usersRepository.Update(user);

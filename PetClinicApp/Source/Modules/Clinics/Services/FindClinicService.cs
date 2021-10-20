@@ -18,7 +18,7 @@ namespace PetClinicApp.Source.Modules.Clinics.Services
             this.clinicsRepository = clinicsRepository;
         }
 
-        public async Task<Clinic> ExecuteAsync(long id)
+        public async Task<ClinicDTO> ExecuteAsync(long id)
         {
             var clinic = await clinicsRepository.Find(id);
 
@@ -27,7 +27,7 @@ namespace PetClinicApp.Source.Modules.Clinics.Services
                 throw new AppErrorException("Clinic does not exists", HttpStatusCode.NotFound);
             }
 
-            return clinic;
+            return clinic.ToDTO();
         }
     }
 }

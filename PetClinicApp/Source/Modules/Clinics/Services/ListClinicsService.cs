@@ -1,4 +1,5 @@
-﻿using PetClinicApp.Source.Modules.Clinics.Entities;
+﻿using PetClinicApp.Source.Modules.Clinics.DTO;
+using PetClinicApp.Source.Modules.Clinics.Entities;
 using PetClinicApp.Source.Modules.Clinics.Repositories;
 using PetClinicApp.Source.Shared.Services;
 using System;
@@ -16,9 +17,11 @@ namespace PetClinicApp.Source.Modules.Clinics.Services
             this.clinicsRepository = clinicsRepository;
         }
 
-        public async Task<List<Clinic>> ExecuteAsync(string search)
+        public async Task<List<ClinicDTO>> ExecuteAsync(string search)
         {
-            return await clinicsRepository.List(search);
+            var clinics = await clinicsRepository.List(search);
+            return clinics.Select(c => c.ToDTO()).ToList();
+            
         }
     }
 }

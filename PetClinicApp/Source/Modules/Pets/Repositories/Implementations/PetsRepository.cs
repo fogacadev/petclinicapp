@@ -43,13 +43,16 @@ namespace PetClinicApp.Source.Modules.Pets.Repositories.Implementations
             return appDbContext.Pets.AsNoTracking().FirstOrDefaultAsync(p => p.Id == id);
         }
 
-        public Task<List<Pet>> List(long userId, string search = "")
+        public async Task<List<Pet>> List(long userId, string search = "")
         {
-            return appDbContext
+            var pets = await appDbContext
                 .Pets
+                .Where(p => p.UserId == userId)
                 .AsNoTracking()
-                .Where(p => p.Name.Contains(search) && p.UserId == userId)
                 .ToListAsync();
+
+
+            return pets.AsQueryable().Filter(search).ToList();
         }
 
         public async Task Update(Pet pet)

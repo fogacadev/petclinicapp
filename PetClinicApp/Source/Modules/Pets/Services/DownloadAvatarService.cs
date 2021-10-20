@@ -2,6 +2,7 @@
 using MimeTypes;
 using PetClinicApp.Source.Modules.Pets.Repositories;
 using PetClinicApp.Source.Shared.Errors;
+using PetClinicApp.Source.Shared.Uploads;
 using System;
 using System.IO;
 using System.Net;
@@ -17,7 +18,7 @@ namespace PetClinicApp.Source.Modules.Pets.Services
             this.petsRepository = petsRepository;
         }
 
-        public async Task<FileContentResult> ExecuteAsync(long loggedUserId, long id)
+        public async Task<FileModel> ExecuteAsync(long loggedUserId, long id)
         {
             var pet = await petsRepository.Find(id);
 
@@ -26,24 +27,13 @@ namespace PetClinicApp.Source.Modules.Pets.Services
                 throw new AppErrorException("Avatar does not exists", HttpStatusCode.NotFound);
             }
 
-            var path = AppDomain.CurrentDomain.BaseDirectory + "\\files\\account_avatar\\";
-            var filename = $"{path}{pet.Avatar}";
+            var file = await UploadFile.Download("pet_avatar", pet.Avatar);
 
-            //apaga o anexo antigo
-            if (!string.IsNullOrEmpty(pet.Avatar))
+            if(file == null)
             {
-                if (File.Exists(filename))
-                {
-                    var extension = pet.Avatar.Substring(pet.Avatar.LastIndexOf('.'));
-                    extension = extension.Remove(0, 1);
-                    var mimeType = MimeTypeMap.GetMimeType(extension);
-
-                    var bytes = await File.ReadAllBytesAsync(filename);
-                    return new FileContentResult(bytes, mimeType);
-                }
+                throw new AppErrorException("Avatar does not exists.", HttpStatusCode.NotFound);
             }
-
-            throw new AppErrorException("Avatar does not exists", HttpStatusCode.NotFound);
+            return file;
         }
     }
 }

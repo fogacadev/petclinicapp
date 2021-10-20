@@ -28,24 +28,16 @@ namespace PetClinicApp.Source.Modules.Accounts.Services
                 throw new AppErrorException("Avatar does not exists", HttpStatusCode.NotFound);
             }
 
-            var path = AppDomain.CurrentDomain.BaseDirectory + "\\files\\account_avatar\\";
-            var filename = $"{path}{user.Avatar}";
+            var file = await UploadFile.Download("account_avatar", user.Avatar);
 
-            //apaga o anexo antigo
-            if (!string.IsNullOrEmpty(user.Avatar))
+            if(file == null)
             {
-                if (File.Exists(filename))
-                {
-                    var extension = user.Avatar.Substring(user.Avatar.LastIndexOf('.'));
-                    extension = extension.Remove(0, 1);
-                    var mimeType = MimeTypeMap.GetMimeType(extension);
-
-                    var bytes = await File.ReadAllBytesAsync(filename);
-                    return new FileModel(bytes, mimeType);
-                }
+                throw new AppErrorException("Avatar does not exists", HttpStatusCode.NotFound);
             }
 
-            throw new AppErrorException("Avatar does not exists", HttpStatusCode.NotFound);
+            return file;
+
+            
         }
     }
 }

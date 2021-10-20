@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace PetClinicApp.Source.Modules.Pets.DTO
 {
-    public class PetDTO
+    public class CreatePetDTO
     {
-        public long Id { get; set; }
+        [Required(ErrorMessage = "The name field is required")]
         public string Name { get; set; }
         public DateTime BornIn { get; set; }
         public long AnimalId { get; set; }
-        public DateTime CreatedAt { get; set; }
     }
 }

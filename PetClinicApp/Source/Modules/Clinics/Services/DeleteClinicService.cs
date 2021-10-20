@@ -1,4 +1,5 @@
-﻿using PetClinicApp.Source.Modules.Clinics.Entities;
+﻿using PetClinicApp.Source.Modules.Clinics.DTO;
+using PetClinicApp.Source.Modules.Clinics.Entities;
 using PetClinicApp.Source.Modules.Clinics.Repositories;
 using PetClinicApp.Source.Shared.Errors;
 using System;
@@ -17,7 +18,7 @@ namespace PetClinicApp.Source.Modules.Clinics.Services
             this.clinicsRepository = clinicsRepository;
         }
 
-        public async Task<Clinic> ExecuteAsync(long id)
+        public async Task<ClinicDTO> ExecuteAsync(long id)
         {
             var clinic = await clinicsRepository.Find(id);
 
@@ -28,7 +29,7 @@ namespace PetClinicApp.Source.Modules.Clinics.Services
 
             await clinicsRepository.Delete(id);
 
-            return clinic;
+            return clinic.ToDTO();
         }
     }
 }
