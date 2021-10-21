@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using PetClinicApp.Source.Infra;
 using PetClinicApp.Source.Modules.Accounts.Repositories;
 using PetClinicApp.Source.Modules.Accounts.Repositories.Implementations;
@@ -25,6 +26,12 @@ using PetClinicApp.Source.Modules.Reminders.Repositories.Implementations;
 using PetClinicApp.Source.Modules.Reminders.Services;
 using PetClinicApp.Source.Shared.Middlewares;
 using PetClinicApp.Source.Shared.Settings;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace PetClinicApp
@@ -43,6 +50,7 @@ namespace PetClinicApp
         {
             services.AddCors();
             services.AddControllers();
+            services.AddApiVersioning();
 
             services.AddDbContext<AppDbContext>(options => {
                 var connectionString = Configuration.GetConnectionString("Default");
@@ -74,6 +82,69 @@ namespace PetClinicApp
             {
                 options.SuppressModelStateInvalidFilter = true;
             });
+
+            services.AddVersionedApiExplorer(o =>
+            {
+                o.GroupNameFormat = "'v'VVV";
+                o.SubstituteApiVersionInUrl = true;
+            });
+
+            //Configuração do swagger 
+            var jwtSecurityScheme = new OpenApiSecurityScheme
+            {
+                Scheme = "bearer",
+                BearerFormat = "JWT",
+                Name = "JWT Authentication",
+                In = ParameterLocation.Header,
+                Type = SecuritySchemeType.Http,
+                Description = "Insira abaixo apenas o token JWT",
+
+                Reference = new OpenApiReference
+                {
+                    Id = JwtBearerDefaults.AuthenticationScheme,
+                    Type = ReferenceType.SecurityScheme
+                }
+            };
+
+            services.AddSwaggerGen(c =>
+            {
+                c.DocInclusionPredicate((docName, apiDesc) =>
+                {
+                    if (!apiDesc.TryGetMethodInfo(out MethodInfo methodInfo))
+                    {
+                        return false;
+                    }
+
+                    IEnumerable<ApiVersion> versions = methodInfo.DeclaringType
+                        .GetCustomAttributes(true)
+                        .OfType<ApiVersionAttribute>()
+                        .SelectMany(a => a.Versions);
+
+                    return versions.Any(v => $"v{v.ToString()}" == docName);
+                });
+
+                c.SwaggerDoc("v1.0", new OpenApiInfo
+                {
+                    Title = "PetClinicApp",
+                    Description = "Aplicativo de gerenciamento de Pets",
+                    Contact = new OpenApiContact
+                    {
+                        Email = "210937@aluno.riobrancofac.edu.br",
+                        Name = "Felipe Fogaça"
+                    },
+                    Version = "v1.0"
+                });
+
+                var xmlfile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlfile);
+                c.IncludeXmlComments(xmlPath, includeControllerXmlComments: true);
+
+                c.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement{
+                    { jwtSecurityScheme, Array.Empty<string>() }
+                 });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -101,6 +172,14 @@ namespace PetClinicApp
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+            });
+
+            app.UseApiVersioning();
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.RoutePrefix = string.Empty;
+                c.SwaggerEndpoint("/swagger/v1.0/swagger.json", "V1 Docs");
             });
         }
 

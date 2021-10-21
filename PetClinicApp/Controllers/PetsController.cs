@@ -7,15 +7,26 @@ using PetClinicApp.Source.Modules.Pets.DTO;
 using PetClinicApp.Source.Shared.Jwt;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
+using PetClinicApp.Source.Shared.Errors;
 
 namespace PetClinicApp.Controllers
 {
     [ApiController]
-    [Route("api/v1/[controller]")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [Authorize]
     public class PetsController : ControllerBase
     {
-        
+        /// <summary>
+        /// Retorna um pet a partir da id
+        /// </summary>
+        /// <param name="listPetsService"></param>
+        /// <param name="search">Pesquisa</param>
+        /// <returns></returns>
+        [ProducesResponseType(typeof(PetDTO), 200)]
+        [ProducesResponseType(typeof(AppError), 400)]
+        [ProducesResponseType(typeof(AppError), 404)]
+        [ProducesResponseType(typeof(AppError), 500)]
         [HttpGet]
         public async Task<ActionResult<List<PetDTO>>> Get([FromServices] ListPetsService listPetsService, [FromQuery] string search)
         {

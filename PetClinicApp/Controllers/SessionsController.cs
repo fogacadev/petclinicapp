@@ -12,7 +12,8 @@ using Microsoft.AspNetCore.Authorization;
 namespace PetClinicApp.Controllers
 {
     [ApiController]
-    [Route("api/v1/[controller]")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     public class SessionsController : ControllerBase
     {
         [AllowAnonymous]

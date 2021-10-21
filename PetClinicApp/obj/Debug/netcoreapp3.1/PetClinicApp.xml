@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>PetClinicApp</name>
+    </assembly>
+    <members>
+        <member name="M:PetClinicApp.Controllers.AccountsController.RegisterUser(PetClinicApp.Source.Modules.Accounts.Services.RegisterUserService,PetClinicApp.Source.Modules.Accounts.DTO.RegisterUserDTO)">
+            <summary>
+            Registrar um usuário
+            </summary>
+            <param name="registerUserService"></param>
+            <param name="registerUser">Modelo para registrar um usuário</param>
+            <returns></returns>
+        </member>
+        <member name="M:PetClinicApp.Controllers.AccountsController.Update(PetClinicApp.Source.Modules.Accounts.Services.UpdateUserService,PetClinicApp.Source.Modules.Accounts.DTO.UpdateAccountDTO)">
+            <summary>
+            Atualizar um usuário
+            </summary>
+            <param name="updateUserService"></param>
+            <param name="account">Modelo para atualizar um usuário</param>
+            <returns></returns>
+        </member>
+        <member name="M:PetClinicApp.Controllers.AccountsController.UpdatePassword(PetClinicApp.Source.Modules.Accounts.Services.UpdatePasswordService,PetClinicApp.Source.Modules.Accounts.DTO.UpdatePasswordDTO)">
+            <summary>
+            Atualizar a senha do usuário
+            </summary>
+            <param name="updatePasswordService"></param>
+            <param name="updatePassword">Modelo para atualizar a senha do usuário</param>
+            <returns></returns>
+        </member>
+        <member name="M:PetClinicApp.Controllers.AccountsController.UploadAvatar(PetClinicApp.Source.Modules.Accounts.Services.UploadAccountAvatarService,Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+            Atualizar o avatar do usuário
+            </summary>
+            <param name="uploadAccountAvatarService"></param>
+            <param name="file">Arquivo contendo o avatar do usuário. .png .jpg .jpeg</param>
+            <returns></returns>
+        </member>
+        <member name="M:PetClinicApp.Controllers.AccountsController.DownloadAvatar(PetClinicApp.Source.Modules.Accounts.Services.DownloadAccountAvatarService)">
+            <summary>
+            Retorna o avatar do usuário logado
+            </summary>
+            <param name="downloadAccountAvatarService"></param>
+            <returns>Imagem do usuário logado</returns>
+        </member>
+        <member name="M:PetClinicApp.Controllers.AnimalsController.Get(PetClinicApp.Source.Modules.Pets.Services.FindAnimalService,System.Int64)">
+            <summary>
+            Retorna um animal a partir da id
+            </summary>
+            <param name="findAnimalService"></param>
+            <param name="id">Id do animal</param>
+            <returns></returns>
+        </member>
+        <member name="M:PetClinicApp.Controllers.AnimalsController.Get(PetClinicApp.Source.Modules.Pets.Services.ListAnimalsService,System.String)">
+            <summary>
+            Retorna uma lista de animais
+            </summary>
+            <param name="listAnimalsService"></param>
+            <param name="search">Pesquisar</param>
+            <returns></returns>
+        </member>
+        <member name="M:PetClinicApp.Controllers.AnimalsController.Post(PetClinicApp.Source.Modules.Pets.Services.CreateAnimalService,PetClinicApp.Source.Modules.Pets.DTO.CreateAnimalDTO)">
+            <summary>
+            Cria um novo animal
+            </summary>
+            <param name="createAnimalService"></param>
+            <param name="animal">Modelo para criação de um animal</param>
+            <returns></returns>
+        </member>
+        <member name="M:PetClinicApp.Controllers.AnimalsController.Put(PetClinicApp.Source.Modules.Pets.Services.UpdateAnimalService,PetClinicApp.Source.Modules.Pets.DTO.UpdateAnimalDTO)">
+            <summary>
+            Atualiza um animal existente
+            </summary>
+            <param name="updateAnimalService"></param>
+            <param name="animal">Modelo para atualizar um animal</param>
+            <returns></returns>
+        </member>
+        <member name="M:PetClinicApp.Controllers.AnimalsController.Delete(PetClinicApp.Source.Modules.Pets.Services.DeleteAnimalService,System.Int64)">
+            <summary>
+            Deleta um animal a partir da Id
+            </summary>
+            <param name="deleteAnimalService"></param>
+            <param name="id">Id do animal</param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
